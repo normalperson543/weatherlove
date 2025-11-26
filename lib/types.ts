@@ -47,3 +47,11 @@ export type WeatherData = {
   name: string;
   cod: number;
 };
+export type WeatherLocationResult = {
+  name: string;
+  // there are a bunch of local names, i'm not doing allat
+  lat: number;
+  lon: number;
+  country: string;
+  state: string;
+};
