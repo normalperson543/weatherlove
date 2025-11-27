@@ -18,7 +18,7 @@ import { getWeatherData, getForecast } from "@/lib/data";
 import { useState, useEffect } from "react";
 import Bar from "./bar";
 import { settings } from "@/lib/storage";
-
+import { MM_TO_IN, M_TO_MI } from "@/lib/constants";
 export default function AppUI() {
   const [weatherData, setWeatherData] = useState<WeatherData | undefined>();
   const [forecast, setForecast] = useState<WeatherForecastData | undefined>();
@@ -52,22 +52,27 @@ export default function AppUI() {
 
   useEffect(() => {
     if (searchParams.get("units") !== se.units.toString()) {
-      console.log("Detected a change, writing new stuff")
+      console.log("Detected a change, writing new stuff");
       const sp = new URLSearchParams(searchParams);
       sp.set("units", se.units.toString());
       replace(`${pathname}?${sp.toString()}`);
     }
-  })
+  });
   if (!weatherData || !forecast) {
     return (
-      <div>
-        <p>No weather data!</p>
+      <div className="flex flex-col w-full h-full">
+        <Header />
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <div
+            className={`${jetbrainsMono.className} max-w-120 h-full flex flex-col justify-center gap-8 -p-8`}
+          ></div>
+        </div>
       </div>
     );
   }
   console.log(weatherData);
   const tempPercent =
-    ((weatherData.main.temp_max - weatherData.main.temp) /
+    ((weatherData.main.temp - weatherData.main.temp_min) /
       (weatherData.main.temp_max - weatherData.main.temp_min)) *
     100;
   return (
@@ -142,7 +147,8 @@ export default function AppUI() {
               </div>
               {weatherData.wind.gust && (
                 <p>
-                  <b>Gust</b> {weatherData.wind.gust} {se?.units === 0 ? "m/s" : "mph"}
+                  <b>Gust</b> {weatherData.wind.gust}{" "}
+                  {se?.units === 0 ? "m/s" : "mph"}
                 </p>
               )}
             </div>
@@ -153,9 +159,14 @@ export default function AppUI() {
               </div>
               <div className="flex flex-row gap-2 items-end">
                 <p className="text-6xl font-bold tracking-tighter">
-                  {weatherData.rain ? weatherData.rain["1h"] : "0"}
+                  {weatherData.rain
+                    ? se.units === 0
+                      ? weatherData.rain["1h"]
+                      : Math.round(weatherData.rain["1h"] * MM_TO_IN * 100) /
+                        100
+                    : "0"}
                 </p>
-                <p className="text-lg">mm/h</p>
+                <p className="text-lg">{se.units === 0 ? "mm/h" : "in/h"}</p>
               </div>
               <p>in the last hour</p>
             </div>
@@ -165,7 +176,7 @@ export default function AppUI() {
                 <p className="font-bold tracking-wide">Humidity</p>
               </div>
               <div className="flex flex-row gap-2 items-center">
-                <Bar percentage={weatherData.main.humidity} height={12} />
+                <Bar percentage={weatherData.main.humidity} height={48} />
                 <div className="flex flex-row gap-2 items-end">
                   <p className="text-6xl font-bold tracking-tighter">
                     {weatherData.main.humidity}
@@ -180,13 +191,14 @@ export default function AppUI() {
                 <p className="font-bold tracking-wide">Visibility</p>
               </div>
               <div className="flex flex-row gap-2 items-center">
-                <Bar percentage={weatherData.visibility / 100} height={12} />
+                <Bar percentage={weatherData.visibility / 100} height={48} />
                 <div className="flex flex-row gap-2 items-end">
                   <p className="text-6xl font-bold tracking-tighter">
-                    
-                    {weatherData.visibility / 1000}
+                    {se.units === 0 && weatherData.visibility / 1000}
+                    {se.units === 1 &&
+                      Math.round(weatherData.visibility * M_TO_MI * 100) / 100}
                   </p>
-                  <p className="text-lg">km</p>
+                  <p className="text-lg">{se.units === 0 ? "km" : "mi"}</p>
                 </div>
               </div>
             </div>
@@ -196,7 +208,7 @@ export default function AppUI() {
                 <p className="font-bold tracking-wide">Cloud cover</p>
               </div>
               <div className="flex flex-row gap-2 items-center">
-                <Bar percentage={weatherData.clouds.all} height={12} />
+                <Bar percentage={weatherData.clouds.all} height={48} />
                 <div className="flex flex-row gap-2 items-end">
                   <p className="text-6xl font-bold tracking-tighter">
                     {weatherData.clouds.all}
