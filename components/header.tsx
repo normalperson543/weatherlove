@@ -22,11 +22,17 @@ export default function Header() {
     params.set("lat", result.lat.toString());
     params.set("lon", result.lon.toString());
     replace(`${pathname}?${params.toString()}`);
+    setShowHistory(false);
     const hist = searchHistory();
+    const possibleHistIndex = hist.findIndex(
+      (histItem) => histItem.lat === result.lat && histItem.lon === result.lon,
+    );
+    if (possibleHistIndex > -1) {
+      hist.splice(possibleHistIndex, 1);
+    }
     hist.push(result);
     if (hist.length > 5) hist.splice(0, 1);
     saveSearchHistory(hist);
-    setShowHistory(false);
   }
 
   return (
@@ -37,19 +43,19 @@ export default function Header() {
         <b>Weather❤️</b>
         <SearchBar onSelect={handleSelectResult} />
       </div>
-      <div className="flex flex-row gap-2 justify-right">
-        <button className="flex flex-row gap-1 items-center">
-          <HistoryIcon
-            width={16}
-            height={16}
-            onClick={() => setShowHistory(!showHistory)}
-          />
+      <div className="flex flex-row gap-2 justify-end w-72">
+        <button
+          className="flex flex-row gap-1 items-center"
+          onClick={() => setShowHistory(!showHistory)}
+        >
+          <HistoryIcon width={16} height={16} />
           history
         </button>
         {showHistory && (
           <SearchBarResults
             searchResults={history}
             onSelect={handleSelectResult}
+            displayPlaceholder={true}
           />
         )}
       </div>

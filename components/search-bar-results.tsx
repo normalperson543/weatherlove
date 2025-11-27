@@ -6,14 +6,15 @@ import FloatingMenuWrapper from "./floating-menu-wrapper";
 export default function SearchBarResults({
   searchResults,
   onSelect,
+  displayPlaceholder = false
 }: {
   searchResults?: WeatherLocationResult[];
   onSelect: (result: WeatherLocationResult) => void;
+  displayPlaceholder?: boolean
 }) {
-  if (!searchResults) return;
   return (
     <FloatingMenuWrapper>
-      {searchResults.map((res) => (
+      {searchResults && searchResults.map((res) => (
         <button
           className="w-full text-left"
           key={res.lat}
@@ -22,6 +23,7 @@ export default function SearchBarResults({
           <b>{res.name}</b> ({res.state}, {res.country})
         </button>
       ))}
+      {((!searchResults || (searchResults && searchResults.length === 0)) && displayPlaceholder) && <p>No results</p> }
     </FloatingMenuWrapper>
   );
 }
