@@ -18,14 +18,32 @@ import {
 import Header from "./header";
 import WeatherIcon from "./weather-icon";
 import MiniWeatherTile from "./mini-weather-tile";
+import { useSearchParams } from "next/navigation";
+import { getWeatherData, getForecast } from "@/lib/data";
+import { useState, useEffect } from "react";
 
-export default function AppUI({
-  weatherData,
-  forecast,
-}: {
-  weatherData?: WeatherData;
-  forecast: WeatherForecastData;
-}) {
+export default function AppUI() {
+  const [weatherData, setWeatherData] = useState<WeatherData | undefined>();
+  const [forecast, setForecast] = useState<WeatherForecastData | undefined>();
+  const searchParams = useSearchParams();
+
+  async function fetchWeather() {
+    if (searchParams && searchParams.get("lat") && searchParams.get("lon")) {
+      const wd = await getWeatherData(
+        Number(searchParams.get("lat")),
+        Number(searchParams.get("lon")),
+      );
+      setWeatherData(wd);
+      const wf = await getForecast(
+        Number(searchParams.get("lat")),
+        Number(searchParams.get("lon")),
+      );
+      setForecast(wf);
+    }
+  }
+
+  fetchWeather()
+
   if (!weatherData || !forecast) {
     return (
       <div>
@@ -63,6 +81,7 @@ export default function AppUI({
                 <p className="font-bold text-2xl">
                   {weatherData.weather[0].main}
                 </p>
+                <p>{weatherData.weather[0].description}</p>
               </div>
               <div className="flex flex-row gap-2">
                 <b>Lo: </b>
