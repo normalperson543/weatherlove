@@ -13,26 +13,38 @@ import {
 import Header from "./header";
 import WeatherIcon from "./weather-icon";
 import MiniWeatherTile from "./mini-weather-tile";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { getWeatherData, getForecast } from "@/lib/data";
 import { useState, useEffect } from "react";
 import Bar from "./bar";
+import { settings } from "@/lib/storage";
 
 export default function AppUI() {
   const [weatherData, setWeatherData] = useState<WeatherData | undefined>();
   const [forecast, setForecast] = useState<WeatherForecastData | undefined>();
   const searchParams = useSearchParams();
-
+  const se = settings()
+  const { replace } = useRouter();
+  const pathname = usePathname()
+  
   async function fetchWeather() {
     if (searchParams && searchParams.get("lat") && searchParams.get("lon")) {
+      if (!searchParams.get("units")) {
+        const sp = new URLSearchParams(searchParams)
+        console.log(sp)
+        sp.set("units", se.units.toString())
+        replace(`${pathname}?${sp.toString()}`);
+      }
       const wd = await getWeatherData(
         Number(searchParams.get("lat")),
         Number(searchParams.get("lon")),
+        Number(searchParams.get("units"))
       );
       setWeatherData(wd);
       const wf = await getForecast(
         Number(searchParams.get("lat")),
         Number(searchParams.get("lon")),
+        Number(searchParams.get("units"))
       );
       setForecast(wf);
     }
@@ -79,7 +91,7 @@ export default function AppUI() {
                 <Bar percentage={tempPercent} />
                 <div className="flex flex-row items-start">
                   <p className="text-8xl font-bold">
-                    {Math.floor(weatherData.main.temp - 273.15)}
+                    {Math.floor(weatherData.main.temp)}
                   </p>
                   <p className="text-3xl">°C</p>
                 </div>
@@ -93,10 +105,10 @@ export default function AppUI() {
               </div>
               <div className="flex flex-row gap-2">
                 <b>Lo: </b>
-                <p>{Math.floor(weatherData.main.temp_min - 273.15)} °C</p>
+                <p>{Math.floor(weatherData.main.temp_min)} °{se.units === 0 ? "C" : "F"}</p>
                 <div className="w-0.5 h-full bg-gray-600"></div>
                 <b>Hi: </b>
-                <p>{Math.floor(weatherData.main.temp_max - 273.15)} °C</p>
+                <p>{Math.floor(weatherData.main.temp_max)} °{se.units === 0 ? "C" : "F"}</p>
               </div>
             </div>
           </div>

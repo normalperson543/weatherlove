@@ -2,12 +2,14 @@
 
 import { WeatherData } from "@/lib/types";
 import WeatherIcon from "./weather-icon";
+import { settings } from "@/lib/storage";
 
 export default function MiniWeatherTile({
   weatherData,
 }: {
   weatherData: WeatherData;
 }) {
+  const se = settings()
   const date = new Date(weatherData.dt * 1000).toLocaleDateString();
   const time = new Date(weatherData.dt * 1000).toLocaleTimeString();
   return (
@@ -22,7 +24,7 @@ export default function MiniWeatherTile({
           </p>
         </div>
         <WeatherIcon width={24} height={24} id={weatherData.weather[0].id} />
-        <p>{Math.floor(weatherData.main.temp - 273.15)}°C</p>
+        <p>{Math.floor(weatherData.main.temp)}°{se.units === 0 ? "C" : "F"}</p>
       </div>
     </div>
   );

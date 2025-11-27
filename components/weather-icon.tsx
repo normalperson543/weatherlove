@@ -1,3 +1,5 @@
+"use client";
+
 import {
   CloudDrizzleIcon,
   CloudFogIcon,
@@ -6,9 +8,17 @@ import {
   CloudSnowIcon,
   CloudSunIcon,
   CloudyIcon,
-  SunIcon
-} from "lucide-react"
-export default function WeatherIcon({ id, width, height }: { id: number, width: number, height: number }) {
+  SunIcon,
+} from "lucide-react";
+export default function WeatherIcon({
+  id,
+  width,
+  height,
+}: {
+  id: number;
+  width: number;
+  height: number;
+}) {
   return (
     <>
       {id.toString().substring(0, 1) === "2" && (
@@ -26,16 +36,9 @@ export default function WeatherIcon({ id, width, height }: { id: number, width: 
       {id.toString().substring(0, 1) === "7" && (
         <CloudFogIcon width={width} height={height} />
       )}
-      {id === 800 && (
-        <SunIcon width={width} height={height} />
-      )}
-      {id >= 801 &&
-        id <= 803 && (
-          <CloudSunIcon width={width} height={height} />
-        )}
-      {id === 804 && (
-        <CloudyIcon width={width} height={height} />
-      )}
+      {id === 800 && <SunIcon width={width} height={height} />}
+      {id >= 801 && id <= 803 && <CloudSunIcon width={width} height={height} />}
+      {id === 804 && <CloudyIcon width={width} height={height} />}
     </>
-  )
+  );
 }

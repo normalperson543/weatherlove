@@ -1,4 +1,5 @@
-import { WeatherLocationResult } from "./types"
+'use client'
+import { WeatherLocationResult, Settings } from "./types"
 
 export function searchHistory() {
   const h = localStorage.getItem("history")
@@ -11,5 +12,20 @@ export function searchHistory() {
 export function saveSearchHistory(history: WeatherLocationResult[]) {
   const stringified = JSON.stringify(history)
   localStorage.setItem("history", stringified)
+  return stringified;
+}
+export function settings() {
+  if (typeof window !== 'undefined') {
+    const s = localStorage.getItem("settings")
+    if (!s) {
+      localStorage.setItem("settings", '{"units": 0}')
+      return { "units": 0 }
+    }
+    return JSON.parse(s) as Settings
+  } else console.warn("Not on client!")
+}
+export function saveSettings(settings: Settings) {
+  const stringified = JSON.stringify(settings)
+  localStorage.setItem("settings", stringified)
   return stringified;
 }

@@ -74,3 +74,6 @@ export type WeatherForecastData = {
     sunset: number;
   };
 };
+export type Settings = {
+  units: number
+}
