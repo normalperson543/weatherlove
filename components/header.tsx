@@ -3,7 +3,7 @@ import { jetbrainsMono } from "@/lib/fonts";
 import SearchBar from "./search-bar";
 import { HistoryIcon, SettingsIcon } from "lucide-react";
 import { useState } from "react";
-import { searchHistory } from "@/lib/storage";
+import { searchHistory, settings } from "@/lib/storage";
 import SearchBarResults from "./search-bar-results";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { WeatherLocationResult } from "@/lib/types";
@@ -45,7 +45,10 @@ export default function Header() {
         <b>Weather❤️</b>
         <SearchBar onSelect={handleSelectResult} />
       </div>
-      <div className="flex flex-row gap-2 justify-end w-72">
+      <div className="flex flex-row gap-2 justify-end">
+        <button onClick={() => console.log(settings())}>
+          what the fuck is going on
+        </button>
         <div>
           <button
             className="flex flex-row gap-1 items-center"

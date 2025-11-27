@@ -8,21 +8,23 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function SettingsMenu() {
   const [se, setSe] = useState<SettingsType>(settings());
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const { replace } = useRouter();
-  
+
   function handleToggleUnits() {
-    const sp = new URLSearchParams(searchParams)
-    sp.set("units", (se.units === 0 ? 1 : 0).toString())
-    replace(`${pathname}?${sp.toString()}`);
     setSe({
       ...se,
-      units: se.units === 0 ? 1 : 0
+      units: se.units === 0 ? 1 : 0,
     });
     saveSettings(se);
+    console.log("Written the settings")
+    const sp = new URLSearchParams(searchParams);
+    sp.set("units", (se.units).toString());
+    replace(`${pathname}?${sp.toString()}`);
+    console.log("Replaced the pathname")
   }
-  
+
   return (
     <FloatingMenuWrapper>
       <button className="w-full text-left" onClick={handleToggleUnits}>

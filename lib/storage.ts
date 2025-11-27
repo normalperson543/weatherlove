@@ -25,6 +25,7 @@ export function settings() {
   } else console.warn("Not on client!")
 }
 export function saveSettings(settings: Settings) {
+  console.log("write")
   const stringified = JSON.stringify(settings)
   localStorage.setItem("settings", stringified)
   return stringified;

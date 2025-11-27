@@ -23,28 +23,22 @@ export default function AppUI() {
   const [weatherData, setWeatherData] = useState<WeatherData | undefined>();
   const [forecast, setForecast] = useState<WeatherForecastData | undefined>();
   const searchParams = useSearchParams();
-  const se = settings()
+  const se = settings();
   const { replace } = useRouter();
-  const pathname = usePathname()
-  
+  const pathname = usePathname();
+
   async function fetchWeather() {
     if (searchParams && searchParams.get("lat") && searchParams.get("lon")) {
-      if (!searchParams.get("units")) {
-        const sp = new URLSearchParams(searchParams)
-        console.log(sp)
-        sp.set("units", se.units.toString())
-        replace(`${pathname}?${sp.toString()}`);
-      }
       const wd = await getWeatherData(
         Number(searchParams.get("lat")),
         Number(searchParams.get("lon")),
-        Number(searchParams.get("units"))
+        Number(searchParams.get("units")),
       );
       setWeatherData(wd);
       const wf = await getForecast(
         Number(searchParams.get("lat")),
         Number(searchParams.get("lon")),
-        Number(searchParams.get("units"))
+        Number(searchParams.get("units")),
       );
       setForecast(wf);
     }
@@ -56,6 +50,14 @@ export default function AppUI() {
     })();
   }, [searchParams]);
 
+  useEffect(() => {
+    if (searchParams.get("units") !== se.units.toString()) {
+      console.log("Detected a change, writing new stuff")
+      const sp = new URLSearchParams(searchParams);
+      sp.set("units", se.units.toString());
+      replace(`${pathname}?${sp.toString()}`);
+    }
+  })
   if (!weatherData || !forecast) {
     return (
       <div>
@@ -93,7 +95,7 @@ export default function AppUI() {
                   <p className="text-8xl font-bold">
                     {Math.floor(weatherData.main.temp)}
                   </p>
-                  <p className="text-3xl">°C</p>
+                  <p className="text-3xl">°{se.units === 0 ? "C" : "F"}</p>
                 </div>
               </div>
 
@@ -105,10 +107,16 @@ export default function AppUI() {
               </div>
               <div className="flex flex-row gap-2">
                 <b>Lo: </b>
-                <p>{Math.floor(weatherData.main.temp_min)} °{se.units === 0 ? "C" : "F"}</p>
+                <p>
+                  {Math.floor(weatherData.main.temp_min)} °
+                  {se.units === 0 ? "C" : "F"}
+                </p>
                 <div className="w-0.5 h-full bg-gray-600"></div>
                 <b>Hi: </b>
-                <p>{Math.floor(weatherData.main.temp_max)} °{se.units === 0 ? "C" : "F"}</p>
+                <p>
+                  {Math.floor(weatherData.main.temp_max)} °
+                  {se.units === 0 ? "C" : "F"}
+                </p>
               </div>
             </div>
           </div>
@@ -123,7 +131,11 @@ export default function AppUI() {
                   {weatherData.wind.speed}
                 </p>
                 <div className="flex flex-col spacing-between h-full">
-                  <ArrowUpIcon width={16} height={16} style={{rotate: `${weatherData.wind.deg}deg`}} />
+                  <ArrowUpIcon
+                    width={16}
+                    height={16}
+                    style={{ rotate: `${weatherData.wind.deg}deg` }}
+                  />
 
                   <p className="text-lg">m/s</p>
                 </div>
