@@ -17,7 +17,7 @@ export default function SearchBarResults({
         <button
           className="w-full text-left"
           key={res.lat}
-          onClick={() => onSelect(res.lat, res.lon)}
+          onClick={() => onSelect(res)}
         >
           <b>{res.name}</b> ({res.state}, {res.country})
         </button>
