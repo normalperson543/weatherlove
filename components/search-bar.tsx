@@ -8,6 +8,7 @@ import { searchLocationsByName } from "@/lib/data";
 import { WeatherLocationResult } from "@/lib/types";
 import { useSearchParams } from "next/navigation";
 import { useRouter, usePathname } from "next/navigation";
+import { saveSearchHistory, searchHistory } from "@/lib/storage";
 export default function SearchBar() {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState<WeatherLocationResult[]>()
@@ -21,13 +22,17 @@ export default function SearchBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams()
   const { replace } = useRouter();
-  function handleSelectResult(lat: number, lon: number) {
+  function handleSelectResult(result: WeatherLocationResult) {
     console.log("propagated correctly")
     const params = new URLSearchParams(searchParams);
-    params.set("lat", lat.toString())
-    params.set("lon", lon.toString())
+    params.set("lat", result.lat.toString())
+    params.set("lon", result.lon.toString())
     replace(`${pathname}?${params.toString()}`);
     setSearchResults([])
+    const hist = searchHistory()
+    hist.push(result)
+    if (hist.length > 5) hist.splice(0, 1)
+    saveSearchHistory(hist)
   }
   return (
     <div>

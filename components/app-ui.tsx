@@ -3,15 +3,10 @@
 import { WeatherData, WeatherForecastData } from "@/lib/types";
 import { jetbrainsMono } from "@/lib/fonts";
 import {
-  CloudDrizzleIcon,
-  CloudFogIcon,
-  CloudLightningIcon,
+  ArrowUpIcon,
   CloudRainIcon,
-  CloudSnowIcon,
-  CloudSunIcon,
   CloudyIcon,
   EyeIcon,
-  SunIcon,
   WavesIcon,
   WindIcon,
 } from "lucide-react";
@@ -21,6 +16,7 @@ import MiniWeatherTile from "./mini-weather-tile";
 import { useSearchParams } from "next/navigation";
 import { getWeatherData, getForecast } from "@/lib/data";
 import { useState, useEffect } from "react";
+import Bar from "./bar";
 
 export default function AppUI() {
   const [weatherData, setWeatherData] = useState<WeatherData | undefined>();
@@ -80,12 +76,7 @@ export default function AppUI() {
                 Weather in <b>{weatherData.name}</b>
               </p>
               <div className="flex flex-row items-center gap-2 w-full h-full">
-                <div
-                  className="w-1 h-24 flex-none"
-                  style={{
-                    background: `linear-gradient(to bottom, #000 ${tempPercent}%, #999 ${tempPercent}%)`,
-                  }}
-                ></div>
+                <Bar percentage={tempPercent} />
                 <div className="flex flex-row items-start">
                   <p className="text-8xl font-bold">
                     {Math.floor(weatherData.main.temp - 273.15)}
@@ -115,15 +106,21 @@ export default function AppUI() {
                 <WindIcon width={16} height={16} />
                 <p className="font-bold tracking-wide">Wind</p>
               </div>
-              <div className="flex flex-row gap-2 items-end">
+              <div className="flex flex-row gap-2 items-center">
                 <p className="text-6xl font-bold tracking-tighter">
                   {weatherData.wind.speed}
                 </p>
-                <p className="text-lg">m/s</p>
+                <div className="flex flex-col spacing-between h-full">
+                  <ArrowUpIcon width={16} height={16} style={{rotate: `${weatherData.wind.deg}deg`}} />
+
+                  <p className="text-lg">m/s</p>
+                </div>
               </div>
-              <p>
-                <b>Gust</b> {weatherData.wind.gust} m/s
-              </p>
+              {weatherData.wind.gust && (
+                <p>
+                  <b>Gust</b> {weatherData.wind.gust} m/s
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex flex-row gap-2 items-center">
@@ -143,11 +140,14 @@ export default function AppUI() {
                 <WavesIcon width={16} height={16} />
                 <p className="font-bold tracking-wide">Humidity</p>
               </div>
-              <div className="flex flex-row gap-2 items-end">
-                <p className="text-6xl font-bold tracking-tighter">
-                  {weatherData.main.humidity}
-                </p>
-                <p className="text-lg">%</p>
+              <div className="flex flex-row gap-2 items-center">
+                <Bar percentage={weatherData.main.humidity} height={12} />
+                <div className="flex flex-row gap-2 items-end">
+                  <p className="text-6xl font-bold tracking-tighter">
+                    {weatherData.main.humidity}
+                  </p>
+                  <p className="text-lg">%</p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -155,11 +155,14 @@ export default function AppUI() {
                 <EyeIcon width={16} height={16} />
                 <p className="font-bold tracking-wide">Visibility</p>
               </div>
-              <div className="flex flex-row gap-2 items-end">
-                <p className="text-6xl font-bold tracking-tighter">
-                  {weatherData.visibility / 1000}
-                </p>
-                <p className="text-lg">km</p>
+              <div className="flex flex-row gap-2 items-center">
+                <Bar percentage={weatherData.visibility / 100} height={12} />
+                <div className="flex flex-row gap-2 items-end">
+                  <p className="text-6xl font-bold tracking-tighter">
+                    {weatherData.visibility / 1000}
+                  </p>
+                  <p className="text-lg">km</p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -167,11 +170,14 @@ export default function AppUI() {
                 <CloudyIcon width={16} height={16} />
                 <p className="font-bold tracking-wide">Cloud cover</p>
               </div>
-              <div className="flex flex-row gap-2 items-end">
-                <p className="text-6xl font-bold tracking-tighter">
-                  {weatherData.clouds.all}
-                </p>
-                <p className="text-lg">%</p>
+              <div className="flex flex-row gap-2 items-center">
+                <Bar percentage={weatherData.clouds.all} height={12} />
+                <div className="flex flex-row gap-2 items-end">
+                  <p className="text-6xl font-bold tracking-tighter">
+                    {weatherData.clouds.all}
+                  </p>
+                  <p className="text-lg">%</p>
+                </div>
               </div>
             </div>
           </div>
