@@ -1,6 +1,6 @@
 "use client";
 
-import { WeatherData } from "@/lib/types";
+import { WeatherData, WeatherForecastData } from "@/lib/types";
 import { jetbrainsMono } from "@/lib/fonts";
 import {
   CloudDrizzleIcon,
@@ -17,9 +17,16 @@ import {
 } from "lucide-react";
 import Header from "./header";
 import WeatherIcon from "./weather-icon";
+import MiniWeatherTile from "./mini-weather-tile";
 
-export default function AppUI({ weatherData }: { weatherData?: WeatherData }) {
-  if (!weatherData) {
+export default function AppUI({
+  weatherData,
+  forecast,
+}: {
+  weatherData?: WeatherData;
+  forecast: WeatherForecastData;
+}) {
+  if (!weatherData || !forecast) {
     return (
       <div>
         <p>No weather data!</p>
@@ -36,7 +43,11 @@ export default function AppUI({ weatherData }: { weatherData?: WeatherData }) {
         >
           <div className="flex flex-row gap-6 items-center">
             <div className="p-12 bg-gray-100">
-              <WeatherIcon width={96} height={96} id={weatherData.weather[0].id} />
+              <WeatherIcon
+                width={96}
+                height={96}
+                id={weatherData.weather[0].id}
+              />
             </div>
             <div className="flex flex-col gap-3 justify-start">
               <p>
@@ -130,6 +141,11 @@ export default function AppUI({ weatherData }: { weatherData?: WeatherData }) {
           </div>
           <div className="flex flex-col gap-2">
             <h2 className="font-bold text-2xl">Next 5 days</h2>
+            <div className="flex flex-row overflow-x-auto gap-8">
+              {forecast.list.map((data) => (
+                <MiniWeatherTile weatherData={data} key={data.dt} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

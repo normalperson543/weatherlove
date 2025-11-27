@@ -1,9 +1,29 @@
-'use client'
-export default function MiniWeatherTile() {
+"use client";
+
+import { WeatherData } from "@/lib/types";
+import WeatherIcon from "./weather-icon";
+
+export default function MiniWeatherTile({
+  weatherData,
+}: {
+  weatherData: WeatherData;
+}) {
+  const date = new Date(weatherData.dt * 1000).toLocaleDateString();
+  const time = new Date(weatherData.dt * 1000).toLocaleTimeString();
   return (
-    <div className="flex flex-col gap-2 justify-center">
-      <p className="text-gray-700">5:00 PM</p>
-      
+    <div className="flex-none">
+      <div className="flex flex-col gap-2 items-center w-16">
+        <div className="flex flex-col items-center">
+          <p className="text-gray-500">
+            {date.split("/")[0]}/{date.split("/")[1]}
+          </p>
+          <p className="text-gray-500">
+            {time.split(":")[0]} {time.split(" ")[1]}
+          </p>
+        </div>
+        <WeatherIcon width={24} height={24} id={weatherData.weather[0].id} />
+        <p>{Math.floor(weatherData.main.temp - 273.15)}°C</p>
+      </div>
     </div>
-  )
+  );
 }
