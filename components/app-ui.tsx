@@ -42,7 +42,11 @@ export default function AppUI() {
     }
   }
 
-  fetchWeather()
+  useEffect(() => {
+    (async () => {
+      fetchWeather();
+    })();
+  }, [searchParams]);
 
   if (!weatherData || !forecast) {
     return (
@@ -52,6 +56,10 @@ export default function AppUI() {
     );
   }
   console.log(weatherData);
+  const tempPercent =
+    ((weatherData.main.temp_max - weatherData.main.temp) /
+      (weatherData.main.temp_max - weatherData.main.temp_min)) *
+    100;
   return (
     <div className="flex flex-col w-full h-full">
       <Header />
@@ -71,12 +79,21 @@ export default function AppUI() {
               <p>
                 Weather in <b>{weatherData.name}</b>
               </p>
-              <div className="flex flex-row items-start">
-                <p className="text-8xl font-bold">
-                  {Math.floor(weatherData.main.temp - 273.15)}
-                </p>
-                <p className="text-3xl">°C</p>
+              <div className="flex flex-row items-center gap-2 w-full h-full">
+                <div
+                  className="w-1 h-24 flex-none"
+                  style={{
+                    background: `linear-gradient(to bottom, #000 ${tempPercent}%, #999 ${tempPercent}%)`,
+                  }}
+                ></div>
+                <div className="flex flex-row items-start">
+                  <p className="text-8xl font-bold">
+                    {Math.floor(weatherData.main.temp - 273.15)}
+                  </p>
+                  <p className="text-3xl">°C</p>
+                </div>
               </div>
+
               <div className="flex flex-col gap-2">
                 <p className="font-bold text-2xl">
                   {weatherData.weather[0].main}
