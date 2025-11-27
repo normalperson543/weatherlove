@@ -2,12 +2,14 @@
 import { WeatherLocationResult, Settings } from "./types"
 
 export function searchHistory() {
-  const h = localStorage.getItem("history")
-  if (!h) {
-    localStorage.setItem("history", "[]")
-    return []
-  }
-  return JSON.parse(h) as WeatherLocationResult[]
+  if (typeof window !== 'undefined') {
+    const h = localStorage.getItem("history")
+    if (!h) {
+      localStorage.setItem("history", "[]")
+      return []
+    }
+    return JSON.parse(h) as WeatherLocationResult[]
+  } else console.warn("Not on client!")
 }
 export function saveSearchHistory(history: WeatherLocationResult[]) {
   const stringified = JSON.stringify(history)

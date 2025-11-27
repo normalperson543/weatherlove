@@ -1,12 +1,14 @@
 "use client";
 
-import { WeatherData, WeatherForecastData } from "@/lib/types";
+import { Settings, WeatherData, WeatherForecastData } from "@/lib/types";
 import { jetbrainsMono } from "@/lib/fonts";
 import {
   ArrowUpIcon,
   CloudRainIcon,
   CloudyIcon,
   EyeIcon,
+  SunriseIcon,
+  SunsetIcon,
   WavesIcon,
   WindIcon,
 } from "lucide-react";
@@ -19,11 +21,13 @@ import { useState, useEffect } from "react";
 import Bar from "./bar";
 import { settings } from "@/lib/storage";
 import { MM_TO_IN, M_TO_MI } from "@/lib/constants";
+import Image from "next/image";
+import Link from "next/link";
 export default function AppUI() {
   const [weatherData, setWeatherData] = useState<WeatherData | undefined>();
   const [forecast, setForecast] = useState<WeatherForecastData | undefined>();
   const searchParams = useSearchParams();
-  const se = settings();
+  const se = settings() as Settings;
   const { replace } = useRouter();
   const pathname = usePathname();
 
@@ -41,6 +45,9 @@ export default function AppUI() {
         Number(searchParams.get("units")),
       );
       setForecast(wf);
+    } else {
+      setWeatherData(undefined);
+      setForecast(undefined);
     }
   }
 
@@ -64,8 +71,28 @@ export default function AppUI() {
         <Header />
         <div className="flex flex-col w-full h-full items-center justify-center">
           <div
-            className={`${jetbrainsMono.className} max-w-120 h-full flex flex-col justify-center gap-8 -p-8`}
-          ></div>
+            className={`${jetbrainsMono.className} max-w-120 h-full flex flex-col items-center justify-center gap-8 -p-8`}
+          >
+            <div className="flex flex-col gap-2">
+              <h2 className="text-xl font-bold">WeatherLove</h2>
+              <p>A minimal weather app based on OpenWeatherMap.</p>
+              <p>Start typing a location to see the weather.</p>
+              <Link
+                href="https://github.com/normalperson543/weatherlove"
+                target="_blank"
+              >
+                <button className="flex flex-row gap-2 items-center text-gray-600">
+                  <Image
+                    src="/assets/github-mark.svg"
+                    width={16}
+                    height={16}
+                    alt="GitHub icon"
+                  />
+                  github repository
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -76,14 +103,14 @@ export default function AppUI() {
       (weatherData.main.temp_max - weatherData.main.temp_min)) *
     100;
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full bg-white dark:bg-black text-black dark:text-gray-200">
       <Header />
       <div className="flex flex-col w-full h-full items-center justify-center">
         <div
           className={`${jetbrainsMono.className} max-w-120 h-full flex flex-col justify-center gap-8 -p-8`}
         >
           <div className="flex flex-row gap-6 items-center">
-            <div className="p-12 bg-gray-100">
+            <div className="p-12 bg-gray-100 dark:bg-gray-900">
               <WeatherIcon
                 width={96}
                 height={96}
@@ -104,7 +131,7 @@ export default function AppUI() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 <p className="font-bold text-2xl">
                   {weatherData.weather[0].main}
                 </p>
@@ -125,7 +152,7 @@ export default function AppUI() {
               </div>
             </div>
           </div>
-          <div className="flex flex-row flex-wrap gap-8 items-center justify-center">
+          <div className="flex flex-row flex-wrap gap-8 items-start justify-center">
             <div className="flex flex-col gap-2">
               <div className="flex flex-row gap-2 items-center">
                 <WindIcon width={16} height={16} />
@@ -216,6 +243,22 @@ export default function AppUI() {
                   <p className="text-lg">%</p>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className="flex flex-row justify-center gap-4">
+            <div className="flex flex-row gap-2 items-center">
+              <SunriseIcon width={16} height={16} />
+              <b>Sunrise</b>
+              <p>
+                {new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString()}
+              </p>
+            </div>
+            <div className="flex flex-row gap-2 items-center">
+              <SunsetIcon width={16} height={16} />
+              <b>Sunset</b>
+              <p>
+                {new Date(weatherData.sys.sunset * 1000).toLocaleTimeString()}
+              </p>
             </div>
           </div>
           <div className="flex flex-col gap-2">

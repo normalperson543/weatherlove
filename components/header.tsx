@@ -3,12 +3,13 @@ import { jetbrainsMono } from "@/lib/fonts";
 import SearchBar from "./search-bar";
 import { HistoryIcon, SettingsIcon } from "lucide-react";
 import { useState } from "react";
-import { searchHistory, settings } from "@/lib/storage";
+import { searchHistory } from "@/lib/storage";
 import SearchBarResults from "./search-bar-results";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { WeatherLocationResult } from "@/lib/types";
 import { saveSearchHistory } from "@/lib/storage";
 import SettingsMenu from "./settings-menu";
+import Link from "next/link";
 
 export default function Header() {
   const [showHistory, setShowHistory] = useState(false);
@@ -17,7 +18,7 @@ export default function Header() {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const history = searchHistory();
+  const history = searchHistory() as WeatherLocationResult[];
 
   function handleSelectResult(result: WeatherLocationResult) {
     const params = new URLSearchParams(searchParams);
@@ -25,7 +26,7 @@ export default function Header() {
     params.set("lon", result.lon.toString());
     replace(`${pathname}?${params.toString()}`);
     setShowHistory(false);
-    const hist = searchHistory();
+    const hist = searchHistory() as WeatherLocationResult[];
     const possibleHistIndex = hist.findIndex(
       (histItem) => histItem.lat === result.lat && histItem.lon === result.lon,
     );
@@ -39,10 +40,10 @@ export default function Header() {
 
   return (
     <div
-      className={`${jetbrainsMono.className} flex flex-row gap-2 p-1 bg-gray-100 h-8 items-center`}
+      className={`${jetbrainsMono.className} flex flex-row gap-2 p-1 bg-gray-100 dark:bg-gray-900 text-black dark:text-gray-200 h-8 items-center`}
     >
       <div className="flex-1 flex flex-row gap-2 items-center">
-        <b>Weather❤️</b>
+        <Link href="/"><b>Weather❤️</b></Link>
         <SearchBar onSelect={handleSelectResult} />
       </div>
       <div className="flex flex-row gap-2 justify-end">
