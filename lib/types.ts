@@ -30,6 +30,7 @@ export type WeatherData = {
   };
   rain: {
     "1h": number;
+    "3h": number;
   };
   clouds: {
     all: number;

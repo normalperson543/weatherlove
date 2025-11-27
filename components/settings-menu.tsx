@@ -13,11 +13,17 @@ export default function SettingsMenu() {
   const { replace } = useRouter();
 
   function handleToggleUnits() {
+    console.log(se)
+    console.log(se.units === 0 ? 1 : 0)
     setSe({
       ...se,
       units: se.units === 0 ? 1 : 0,
     });
-    saveSettings(se);
+    
+    saveSettings({
+      ...se,
+      units: se.units === 0 ? 1 : 0,
+    });
     console.log("Written the settings")
     const sp = new URLSearchParams(searchParams);
     sp.set("units", (se.units).toString());

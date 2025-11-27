@@ -46,9 +46,6 @@ export default function Header() {
         <SearchBar onSelect={handleSelectResult} />
       </div>
       <div className="flex flex-row gap-2 justify-end">
-        <button onClick={() => console.log(settings())}>
-          what the fuck is going on
-        </button>
         <div>
           <button
             className="flex flex-row gap-1 items-center"

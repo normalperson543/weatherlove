@@ -137,12 +137,12 @@ export default function AppUI() {
                     style={{ rotate: `${weatherData.wind.deg}deg` }}
                   />
 
-                  <p className="text-lg">m/s</p>
+                  <p className="text-lg">{se?.units === 0 ? "m/s" : "mph"}</p>
                 </div>
               </div>
               {weatherData.wind.gust && (
                 <p>
-                  <b>Gust</b> {weatherData.wind.gust} m/s
+                  <b>Gust</b> {weatherData.wind.gust} {se?.units === 0 ? "m/s" : "mph"}
                 </p>
               )}
             </div>
@@ -183,6 +183,7 @@ export default function AppUI() {
                 <Bar percentage={weatherData.visibility / 100} height={12} />
                 <div className="flex flex-row gap-2 items-end">
                   <p className="text-6xl font-bold tracking-tighter">
+                    
                     {weatherData.visibility / 1000}
                   </p>
                   <p className="text-lg">km</p>

@@ -3,13 +3,14 @@
 import { WeatherData } from "@/lib/types";
 import WeatherIcon from "./weather-icon";
 import { settings } from "@/lib/storage";
+import { DropletIcon } from "lucide-react";
 
 export default function MiniWeatherTile({
   weatherData,
 }: {
   weatherData: WeatherData;
 }) {
-  const se = settings()
+  const se = settings();
   const date = new Date(weatherData.dt * 1000).toLocaleDateString();
   const time = new Date(weatherData.dt * 1000).toLocaleTimeString();
   return (
@@ -24,7 +25,13 @@ export default function MiniWeatherTile({
           </p>
         </div>
         <WeatherIcon width={24} height={24} id={weatherData.weather[0].id} />
-        <p>{Math.floor(weatherData.main.temp)}°{se.units === 0 ? "C" : "F"}</p>
+        <p>
+          {Math.floor(weatherData.main.temp)}°{se.units === 0 ? "C" : "F"}
+        </p>
+        <div className="text-gray-500 flex flex-row gap-1 items-center">
+          <DropletIcon width={16} height={16} />
+          {weatherData.rain ? Math.floor(weatherData.rain["3h"]) : "0"}%
+        </div>
       </div>
     </div>
   );
