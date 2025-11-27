@@ -30,7 +30,7 @@ export default function MiniWeatherTile({
         </p>
         <div className="text-gray-500 flex flex-row gap-1 items-center">
           <DropletIcon width={16} height={16} />
-          {weatherData.rain ? Math.floor(weatherData.rain["3h"]) : "0"}%
+          {weatherData.rain ? Math.floor(weatherData.rain["3h"]) : "0"}mm
         </div>
       </div>
     </div>
