@@ -6,8 +6,9 @@ import SearchBarResults from "./search-bar-results";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 import { searchLocationsByName } from "@/lib/data";
 import { WeatherLocationResult } from "@/lib/types";
-
-export default function SearchBar({ onSelect }: {onSelect: (lat: number, lon: number) => void}) {
+import { useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+export default function SearchBar() {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState<WeatherLocationResult[]>()
   const debounceSearch = useDebouncedCallback(async () => {
@@ -16,6 +17,17 @@ export default function SearchBar({ onSelect }: {onSelect: (lat: number, lon: nu
   function handleChangeSearchText(newSearchText: string) {
     setSearchText(newSearchText)
     debounceSearch()
+  }
+  const pathname = usePathname();
+  const searchParams = useSearchParams()
+  const { replace } = useRouter();
+  function handleSelectResult(lat: number, lon: number) {
+    console.log("propagated correctly")
+    const params = new URLSearchParams(searchParams);
+    params.set("lat", lat.toString())
+    params.set("lon", lon.toString())
+    replace(`${pathname}?${params.toString()}`);
+    setSearchResults([])
   }
   return (
     <div>
@@ -28,7 +40,7 @@ export default function SearchBar({ onSelect }: {onSelect: (lat: number, lon: nu
           placeholder="Search for a city"
         />
       </div>
-      <SearchBarResults searchResults={searchResults} onSelect={onSelect} />
+      <SearchBarResults searchResults={searchResults} onSelect={handleSelectResult} />
     </div>
   );
 }

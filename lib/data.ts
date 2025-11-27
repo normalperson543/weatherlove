@@ -10,6 +10,7 @@ export async function getWeatherData(lat: number, lon: number) {
 }
 export async function searchLocationsByName(searchTerm: string) {
   const resp = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${searchTerm}&limit=5&appid=${env.OWM_API_KEY}`)
+  if (!resp.ok) return [];
   const respJson = await resp.json()
   return respJson as WeatherLocationResult[]
 }
