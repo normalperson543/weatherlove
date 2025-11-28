@@ -76,5 +76,6 @@ export type WeatherForecastData = {
   };
 };
 export type Settings = {
-  units: number
+  units: number,
+  colorScheme: number,
 }

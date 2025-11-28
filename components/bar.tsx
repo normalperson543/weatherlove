@@ -10,7 +10,7 @@ export default function Bar({
     <div
       className={`w-1 flex-none`}
       style={{
-        background: `linear-gradient(to bottom, #000 ${percentage}%, #999 ${percentage}%)`,
+        background: `linear-gradient(to bottom, light-dark(#000, #ddd) ${percentage}%, light-dark(#999, #777) ${percentage}%)`,
         height: `${height}px`,
       }}
     ></div>

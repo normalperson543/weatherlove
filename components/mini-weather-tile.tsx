@@ -1,6 +1,6 @@
 "use client";
 
-import { WeatherData } from "@/lib/types";
+import { Settings, WeatherData } from "@/lib/types";
 import WeatherIcon from "./weather-icon";
 import { settings } from "@/lib/storage";
 import { DropletIcon } from "lucide-react";
@@ -10,17 +10,17 @@ export default function MiniWeatherTile({
 }: {
   weatherData: WeatherData;
 }) {
-  const se = settings();
+  const se = settings() as Settings;
   const date = new Date(weatherData.dt * 1000).toLocaleDateString();
   const time = new Date(weatherData.dt * 1000).toLocaleTimeString();
   return (
     <div className="flex-none">
       <div className="flex flex-col gap-2 items-center w-22">
         <div className="flex flex-col items-center">
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-600">
             {date.split("/")[0]}/{date.split("/")[1]}
           </p>
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-600">
             {time.split(":")[0]} {time.split(" ")[1]}
           </p>
         </div>
@@ -28,7 +28,7 @@ export default function MiniWeatherTile({
         <p>
           {Math.floor(weatherData.main.temp)}°{se.units === 0 ? "C" : "F"}
         </p>
-        <div className="text-gray-500 flex flex-row gap-1 items-center">
+        <div className="text-gray-500 dark:text-gray-600 flex flex-row gap-1 items-center">
           <DropletIcon width={16} height={16} />
           <p className="tracking-tighter">
           {weatherData.rain

@@ -6,7 +6,7 @@ export default function FloatingMenuWrapper({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="fixed z-10 flex flex-col bg-gray-100 w-72 top-8">
+    <div className="fixed z-10 flex flex-col bg-gray-100 dark:bg-gray-900 w-72 top-8">
       {children}
     </div>
   );

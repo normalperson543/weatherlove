@@ -20,8 +20,8 @@ export function settings() {
   if (typeof window !== 'undefined') {
     const s = localStorage.getItem("settings")
     if (!s) {
-      localStorage.setItem("settings", '{"units": 0}')
-      return { "units": 0 }
+      localStorage.setItem("settings", '{"units": 0, "colorScheme": 0}')
+      return { "units": 0, "colorScheme": 0 }
     }
     return JSON.parse(s) as Settings
   } else console.warn("Not on client!")
