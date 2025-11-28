@@ -1,7 +1,9 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import Fallback from "./fallback";
+
 export default function LayoutWrapper({
   children,
 }: {
@@ -15,7 +17,7 @@ export default function LayoutWrapper({
     async function s() {
       setIsClient(true);
     }
-    s()
+    s();
   }, []);
 
   let dark = false;
@@ -28,15 +30,17 @@ export default function LayoutWrapper({
     dark = false;
   }
   return (
-    <div
-      className={`${
-        dark ? "dark" : ""
-      } flex flex-col w-full h-full bg-white dark:bg-black text-black dark:text-gray-200`}
-      style={{
-        colorScheme: dark ? "dark" : "light",
-      }}
-    >
-      {children}
-    </div>
+    <Suspense fallback={<Fallback />}>
+      <div
+        className={`${
+          dark ? "dark" : ""
+        } flex flex-col w-full h-full bg-white dark:bg-black text-black dark:text-gray-200`}
+        style={{
+          colorScheme: dark ? "dark" : "light",
+        }}
+      >
+        {children}
+      </div>
+    </Suspense>
   );
 }

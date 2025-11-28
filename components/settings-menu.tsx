@@ -13,8 +13,6 @@ export default function SettingsMenu() {
   const { replace } = useRouter();
 
   function handleToggleUnits() {
-    console.log(se)
-    console.log(se.units === 0 ? 1 : 0)
     setSe({
       ...se,
       units: se.units === 0 ? 1 : 0,
@@ -24,11 +22,9 @@ export default function SettingsMenu() {
       ...se,
       units: se.units === 0 ? 1 : 0,
     });
-    console.log("Written the settings")
     const sp = new URLSearchParams(searchParams);
     sp.set("units", (se.units).toString());
     replace(`${pathname}?${sp.toString()}`);
-    console.log("Replaced the pathname")
   }
   function handleToggleColorScheme() {
     let seColor = se.colorScheme
@@ -43,11 +39,9 @@ export default function SettingsMenu() {
       ...se,
       colorScheme: seColor,
     });
-    console.log("Written the settings")
     const sp = new URLSearchParams(searchParams);
     sp.set("cs", (seColor).toString());
     replace(`${pathname}?${sp.toString()}`);
-    console.log("Replaced the pathname")
   }
   return (
     <FloatingMenuWrapper>

@@ -105,7 +105,6 @@ export default function AppUI() {
       </div>
     );
   }
-  console.log(weatherData);
   const tempPercent =
     ((weatherData.main.temp - weatherData.main.temp_min) /
       (weatherData.main.temp_max - weatherData.main.temp_min)) *
