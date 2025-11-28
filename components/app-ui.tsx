@@ -82,7 +82,7 @@ export default function AppUI() {
           className={`${jetbrainsMono.className} max-w-120 h-full flex flex-col items-center justify-center gap-8 -p-8`}
         >
           <div className="flex flex-col gap-2">
-            <h2 className="text-xl font-bold">WeatherLove</h2>
+            <h2 className="text-xl font-bold">Weatherlove</h2>
             <p>A minimal weather app based on OpenWeatherMap.</p>
             <p>Start typing a location to see the weather.</p>
             <Link

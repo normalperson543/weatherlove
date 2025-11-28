@@ -3,6 +3,8 @@ import { jetbrainsMono } from "@/lib/fonts";
 import "./globals.css";
 import Header from "@/components/header";
 import LayoutWrapper from "@/components/wrapper";
+import { Suspense } from "react";
+import Fallback from "@/components/fallback";
 
 export const metadata: Metadata = {
   title: "Weatherlove",
@@ -17,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="w-full h-full">
       <body className={`${jetbrainsMono.variable} antialiased w-full h-full`}>
-        <LayoutWrapper>
-          <Header />
-          {children}
-        </LayoutWrapper>
+        <Suspense fallback={<Fallback />}>
+          <LayoutWrapper>
+            <Header />
+            {children}
+          </LayoutWrapper>
+        </Suspense>
       </body>
     </html>
   );
