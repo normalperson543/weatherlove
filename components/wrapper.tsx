@@ -11,7 +11,11 @@ export default function LayoutWrapper({
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // lol, next.js docs say to do this
+    // lol, next.js docs say to do this
+    async function s() {
+      setIsClient(true);
+    }
+    s()
   }, []);
 
   let dark = false;

@@ -12,7 +12,6 @@ import {
   WavesIcon,
   WindIcon,
 } from "lucide-react";
-import Header from "./header";
 import WeatherIcon from "./weather-icon";
 import MiniWeatherTile from "./mini-weather-tile";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
@@ -31,18 +30,22 @@ export default function AppUI() {
   const { replace } = useRouter();
   const pathname = usePathname();
 
+  const lat = searchParams.get("lat");
+  const lon = searchParams.get("lon");
+  const units = searchParams.get("units");
+  
   async function fetchWeather() {
-    if (searchParams && searchParams.get("lat") && searchParams.get("lon")) {
+    if (searchParams && lat && lon) {
       const wd = await getWeatherData(
-        Number(searchParams.get("lat")),
-        Number(searchParams.get("lon")),
-        Number(searchParams.get("units")),
+        Number(lat),
+        Number(lon),
+        Number(units),
       );
       setWeatherData(wd);
       const wf = await getForecast(
-        Number(searchParams.get("lat")),
-        Number(searchParams.get("lon")),
-        Number(searchParams.get("units")),
+        Number(lat),
+        Number(lon),
+        Number(units),
       );
       setForecast(wf);
     } else {
@@ -55,11 +58,8 @@ export default function AppUI() {
     (async () => {
       fetchWeather();
     })();
-  }, [
-    searchParams.get("lat"),
-    searchParams.get("lon"),
-    searchParams.get("units"),
-  ]);
+  }, [lat, lon, units]); // eslint-disable-line react-hooks/exhaustive-deps
+  // I'll figure something out about that.
 
   useEffect(() => {
     if (searchParams.get("units") !== se.units.toString()) {
