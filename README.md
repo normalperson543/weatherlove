@@ -4,9 +4,11 @@ A minimal but functional weather app. It uses the OpenWeatherMap API.
 A project for the [Midnight](https://midnight.hackclub.com) hackathon, by [Hack Club](https://hackclub.com)
 
 ## Getting Started
-This was just from the Next.js template, but these instructions should still work.
+Make a .env file and paste your OpenWeatherMap API key into a variable called "OWM_API_KEY".
 
-First, run the development server:
+The rest was just from the Next.js template, but these instructions should still work.
+
+Run the development server:
 
 ```bash
 npm run dev
